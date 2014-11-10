@@ -238,7 +238,7 @@ class AsyncAutoSearchSDK(threading.Thread):
         p = subprocess.Popen(cmd_a, stdout=subprocess.PIPE, stderr=None, shell=True)
         print(p.stdout)
         if p.stdout is not None:
-            self.msgs = p.communicate()
+            self.msgs = p.stdout.readlines()
             if len(self.msgs) > 0:
                 for i in range(0,len(self.msgs)):
                     self.msgs[i] = self.msgs[i].decode("utf-8")
@@ -299,7 +299,7 @@ class CompileDebugCommand(PathDependantCommands):
                 path = buildxml
                 p = subprocess.Popen("ant debug", cwd=path, stdout=subprocess.PIPE, stderr=None, shell=True)
                 if p.stdout is not None:
-                    msg = p.communicate()
+                    msg = p.stdout.readlines()
                     for line in msg:
                         print(line.decode("utf-8", "ignore"))
                     sublime.active_window().active_view().set_status('andrew','Build Finished' )
@@ -334,7 +334,7 @@ class CleanProjectCommand(PathDependantCommands):
                 path = buildxml
                 p = subprocess.Popen("ant clean", cwd=path, stdout=subprocess.PIPE, stderr=None, shell=True)
                 if p.stdout is not None:
-                    msg = p.communicate()
+                    msg = p.stdout.readlines()
                     for line in msg:
                         print(line.decode("utf-8", "ignore"))
             else:
@@ -475,13 +475,13 @@ class InstallToDeviceCommand(PathDependantCommands):
                 cmd_a = command + " -d install -r " + projectName + "-debug.apk"
                 p2 = subprocess.Popen(cmd_a, cwd=path + "/bin", stdout=subprocess.PIPE, stderr=None, shell=True)
                 if p2.stdout is not None:
-                    msg = p2.communicate()
+                    msg = p2.stdout.readlines()
                     for line in msg:
                         print(line.decode("utf-8", "ignore"))
                 cmd_b = command + " shell monkey -v -p " + package + " 1"
                 p3 = subprocess.Popen(cmd_b, cwd=path, stdout=subprocess.PIPE, stderr=None, shell=True)
                 if p3.stdout is not None:
-                    msg = p2.communicate()
+                    msg = p2.stdout.readlines()
                     for line in msg:
                         print(line.decode("utf-8", "ignore"))
 
